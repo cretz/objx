@@ -73,6 +73,23 @@ func TestAccessorsAccessGetInsideArray(t *testing.T) {
 	assert.Nil(t, m.Get("names[[1").Data())
 }
 
+func TestAccessorsGetWithComplexKey(t *testing.T) {
+	m := objx.Map{
+		"domains": objx.Map{
+			"example-dot-com": objx.Map{
+				"apex": "example",
+			},
+			"example.com": objx.Map{
+				"apex": "example",
+			},
+		},
+	}
+
+	assert.Equal(t, "example", m.Get("domains.example-dot-com.apex").Data())
+	// No way to escape the dot
+	assert.Equal(t, "example", m.Get("domains.example.com.apex").Data())
+}
+
 func TestAccessorsGet(t *testing.T) {
 	m := objx.Map{"name": "Tyler"}
 
